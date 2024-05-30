@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Middleware\ForceJsonResponse;
-use App\Http\Middleware\ValidateHostHeader;
-use App\Http\Middleware\XssSanitization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\XssSanitization;
+use App\Http\Controllers\Api\CVController;
+use App\Http\Middleware\ForceJsonResponse;
+use App\Http\Middleware\ValidateHostHeader;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware([ForceJsonResponse::class, XssSanitization::class, ValidateHostHeader::class])->group(function () {
     Route::post('/auth/register', [AuthController::class, 'createUser']);
     Route::post('/auth/login', [AuthController::class, 'loginUser']);
-    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-        return $request->user();
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::post('/cv/save', [CVController::class, 'saveCV']);
+        Route::get('/cv/get/{id}', [CVController::class, 'getCv']);
     });
 });

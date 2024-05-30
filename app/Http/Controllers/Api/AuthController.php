@@ -39,8 +39,6 @@ class AuthController extends Controller
             'password' => 'required|min:8',
         ]);
 
-        dd($registerUserData);
-
         $response = $this->userService->register($registerUserData);
 
         return response()->json($response);
